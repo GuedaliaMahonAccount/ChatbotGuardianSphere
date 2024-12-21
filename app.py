@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 from PyPDF2 import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -5,8 +6,16 @@ from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_community.chat_models import ChatOpenAI
 from langchain.chains.question_answering import load_qa_chain
+from dotenv import load_dotenv
 
-OPENAI_API_KEY = "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"
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Azure OpenAI Configuration
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+
 
 #UI
 
