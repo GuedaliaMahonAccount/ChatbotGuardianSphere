@@ -22,8 +22,12 @@ MONGODB_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
 app = Flask(__name__)
 CORS(app, resources={
     r"/*": {
-        "origins": ['https://guardian-sphere.azurewebsites.net', 'http://localhost:3000',
-                    'https://guardianspheres.com'],
+        "origins": [
+            'https://guardian-sphere.azurewebsites.net',
+            'http://localhost:3000',
+            'https://guardianspheres.com',
+            'https://guardian-sphere-python-dybjfqfkgwd0aegy.israelcentral-01.azurewebsites.net'
+        ],
         "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         "allow_headers": ["Content-Type", "Authorization"],
         "supports_credentials": True
