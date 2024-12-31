@@ -86,27 +86,48 @@ def load_pdfs_at_startup():
 def get_ai_response(query):
     """Get response from AI using loaded PDF knowledge"""
     if not pdf_loaded or vector_store is None:
-        return "PDF data not loaded properly"
+        print("Vector store is not initialized or PDFs not loaded properly.")
+        return "PDF data not loaded properly."
 
     try:
+        # Log the query
+        print(f"Received query: {query}")
+
         # Find similar chunks
         results = vector_store.similarity_search(query, k=2)
+
+        # Log the vector search results
+        print("Similarity search results:", results)
+
+        if not results:
+            return "No relevant information found in PDF data."
+
+        # Create a query prompt with context
+        query_with_context = (
+            f"You are an assistant trained to answer based on the following documents only. "
+            f"Provide helpful, factual, and supportive information based on the documents. "
+            f"Question: {query}"
+        )
 
         # Initialize ChatOpenAI
         llm = ChatOpenAI(
             openai_api_key=OPENAI_API_KEY,
-            temperature=0,
-            max_tokens=100,
+            temperature=0.7,
+            max_tokens=300,
             model_name="gpt-4"
         )
 
         # Create and run QA chain
         chain = load_qa_chain(llm, chain_type="stuff")
-        response = chain.run(input_documents=results, question=query)
+        response = chain.run(input_documents=results, question=query_with_context)
+
+        # Log the AI chain response
+        print("AI chain response:", response)
 
         return response
     except Exception as e:
-        return f"Error generating response: {str(e)}"
+        print(f"Error generating response: {str(e)}")
+        return f"An error occurred: {str(e)}"
 
 
 # Your existing routes with modified chat functionality
